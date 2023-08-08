@@ -86,7 +86,7 @@ router.post("/room/create", async (req, res) => {
     !pricePerDay ||
     !roomImage ||
     !roomDescription ||
-    !availabilityStatus
+    availabilityStatus === null
   )
     return res.status(422).json({ message: "Required fields are not filled." });
 
