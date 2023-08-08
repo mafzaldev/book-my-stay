@@ -37,16 +37,16 @@ router.post("/login", async (req, res) => {
     return res.status(422).json({ error: "Required fields are not filled." });
 
   const isAdminEmail = email.split("@")[1] === "bookmystay.com" ? true : false;
-
   const isAdmin =
     isAdminEmail && email === adminEmail && password === adminPassword;
-
   if (isAdmin) {
     return res.status(200).json({
       message: "Success",
-      role: "admin",
-      name: adminName,
-      email: email,
+      data: {
+        name: adminName,
+        email: email,
+        role: "admin",
+      },
     });
   }
 
@@ -60,9 +60,11 @@ router.post("/login", async (req, res) => {
 
       res.status(200).json({
         message: "Success",
-        role: "customer",
-        name: customer.name,
-        email: customer.email,
+        data: {
+          name: customer.name,
+          email: customer.email,
+          role: "customer",
+        },
       });
     });
   } catch (error) {

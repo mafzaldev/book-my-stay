@@ -31,6 +31,12 @@ const employeeSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 30,
   },
+  status: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 30,
+  },
   salary: {
     type: Number,
     required: true,
