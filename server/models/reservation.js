@@ -9,6 +9,10 @@ const reservationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  price: {
+    type: Number,
+    required: true,
+  },
   phone: {
     type: String,
     required: true,

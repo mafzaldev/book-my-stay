@@ -7,12 +7,18 @@ dependencies:
   cors:
     specifier: ^2.8.5
     version: 2.8.5
+  dotenv:
+    specifier: ^16.3.1
+    version: 16.3.1
   express:
     specifier: ^4.18.2
     version: 4.18.2
   mongoose:
     specifier: ^7.4.2
     version: 7.4.2
+  stripe:
+    specifier: ^12.17.0
+    version: 12.17.0
 
 devDependencies:
   nodemon:
@@ -286,6 +292,11 @@ packages:
   /detect-libc@2.0.2:
     resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
     engines: {node: '>=8'}
+    dev: false
+
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /ee-first@1.1.1:
@@ -1027,6 +1038,14 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       ansi-regex: 5.0.1
+    dev: false
+
+  /stripe@12.17.0:
+    resolution: {integrity: sha512-f8GhS2LQlGCDZ1Akyu57txgSWyLUEYf0yZYS7x2aTKJXVua5lLmmgfJFFYHfTgEdS5P6rurf0Ghcf/HVLggv5g==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 20.4.9
+      qs: 6.11.0
     dev: false
 
   /supports-color@5.5.0:

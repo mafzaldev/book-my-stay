@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const Employee = require("../models/employee");
 const Room = require("../models/room");
+const Reservation = require("../models/reservation");
 
 /* Employees Routes */
 
@@ -75,7 +76,6 @@ router.post("/room/create", async (req, res) => {
     pricePerDay,
     roomImage,
     roomDescription,
-    availabilityStatus,
   } = req.body;
 
   if (
@@ -85,8 +85,7 @@ router.post("/room/create", async (req, res) => {
     !servantContact ||
     !pricePerDay ||
     !roomImage ||
-    !roomDescription ||
-    availabilityStatus === null
+    !roomDescription
   )
     return res.status(422).json({ message: "Required fields are not filled." });
 
@@ -98,7 +97,6 @@ router.post("/room/create", async (req, res) => {
     pricePerDay,
     roomImage,
     roomDescription,
-    availabilityStatus,
   });
 
   try {
@@ -107,6 +105,51 @@ router.post("/room/create", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+/* Dashboard details */
+
+router.get("/dashboard", async (req, res) => {
+  let totalRooms = 0;
+  let occupiedRooms = 0;
+  let availableRooms = 0;
+  let totalBookings = 0;
+  let totalRevenue = 0;
+
+  try {
+    await Room.find().then((rooms) => {
+      totalRooms = rooms.length;
+
+      rooms.forEach((room) => {
+        if (room.booked === true) occupiedRooms++;
+        else availableRooms++;
+      });
+    });
+
+    await Reservation.find().then((reservations) => {
+      totalBookings = reservations.length;
+
+      reservations.forEach((reservation) => {
+        totalRevenue += reservation.price;
+      });
+    });
+
+    res.status(200).json({
+      message: "Success",
+      data: {
+        totalRooms,
+        occupiedRooms,
+        availableRooms,
+        totalBookings,
+        totalRevenue,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while fetching dashboard details." });
   }
 });
 

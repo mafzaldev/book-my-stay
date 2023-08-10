@@ -27,9 +27,9 @@ const roomSchema = new mongoose.Schema({
   roomDescription: {
     type: String,
   },
-  availabilityStatus: {
+  booked: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 

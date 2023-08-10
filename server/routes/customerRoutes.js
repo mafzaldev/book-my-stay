@@ -64,13 +64,13 @@ router.post("/bookRoom", async (req, res) => {
 
   try {
     await Room.findOne({ roomNo: roomNo }).then((room) => {
-      if (room.availabilityStatus === false) {
+      if (room.booked === true) {
         return res.status(422).json({ message: "Room is already booked." });
       } else {
         reservation.save().then(() => {
           res.status(200).json({ message: "Reservation added successfully" });
         });
-        room.availabilityStatus = false;
+        room.booked = true;
         room.save();
       }
     });
@@ -92,12 +92,12 @@ router.post("/rate", async (req, res) => {
     await Reservation.findOne({ _id: reservationId }).then(
       async (reservation) => {
         await Room.findOne({ roomNo: reservation.roomNo }).then((room) => {
-          if (room.availabilityStatus === true) {
+          if (room.booked === true) {
             return res.status(422).json({ message: "Room is not booked." });
           } else {
             reservation.rating = rating;
             reservation.save();
-            room.availabilityStatus = true;
+            room.booked = true;
             room.save();
             res.status(200).json({ message: "Room rated successfully" });
           }

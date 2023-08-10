@@ -1,6 +1,10 @@
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+
+require("dotenv").config();
+
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const customerRoutes = require("./routes/customerRoutes");
