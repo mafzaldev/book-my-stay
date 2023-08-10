@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Room = require("../models/room");
 const Reservation = require("../models/reservation");
-const reservation = require("../models/reservation");
 
 router.get("/rooms", async (req, res) => {
   const { roomType } = req.body;

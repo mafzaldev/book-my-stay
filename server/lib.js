@@ -1,5 +1,5 @@
 const adminName = "Afzal";
-const adminEmail = "afzal@bookmystay.com";
+const adminEmail = "admin@bookmystay.com";
 const adminPassword = "tXZm2FpcZz2rsj";
 
 module.exports = {

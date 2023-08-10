@@ -22,7 +22,7 @@ router.post("/signup", async (req, res) => {
 
   try {
     await customer.save().then(() => {
-      res.status(200).json({ message: "Signed up successfully." });
+      res.status(200).json({ message: "Success" });
     });
   } catch (error) {
     console.log(error);
@@ -36,9 +36,7 @@ router.post("/login", async (req, res) => {
   if (!email || !password)
     return res.status(422).json({ error: "Required fields are not filled." });
 
-  const isAdminEmail = email.split("@")[1] === "bookmystay.com" ? true : false;
-  const isAdmin =
-    isAdminEmail && email === adminEmail && password === adminPassword;
+  const isAdmin = email === adminEmail && password === adminPassword;
   if (isAdmin) {
     return res.status(200).json({
       message: "Success",

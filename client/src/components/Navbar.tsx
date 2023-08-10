@@ -2,24 +2,22 @@ import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
+import useUserStore from "../stores/userStore";
+
 const user = {
-  name: "Chelsea Hagon",
-  email: "chelsea.hagon@example.com",
   imageUrl:
     "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+const userNavigation = [{ name: "Sign out", href: "#" }];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const { name, email } = useUserStore();
+
   return (
     <>
       {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
@@ -34,7 +32,7 @@ export default function Navbar() {
       >
         {({ open }) => (
           <>
-            <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 md:py-4 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 md:py-8 lg:px-8">
               <div className="relative flex justify-between lg:gap-8 xl:grid xl:grid-cols-12">
                 <div className="flex md:absolute md:inset-y-0 md:left-0 lg:static xl:col-span-2">
                   <div className="flex flex-shrink-0 items-center">
@@ -116,10 +114,10 @@ export default function Navbar() {
                   </div>
                   <div className="ml-3">
                     <div className="text-base font-medium text-gray-800">
-                      {user.name}
+                      {name}
                     </div>
                     <div className="text-sm font-medium text-gray-500">
-                      {user.email}
+                      {email}
                     </div>
                   </div>
                 </div>
