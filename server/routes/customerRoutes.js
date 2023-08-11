@@ -1,21 +1,23 @@
 const router = require("express").Router();
 const Room = require("../models/room");
 const Reservation = require("../models/reservation");
+const { checkout } = require("../lib");
 
 router.get("/rooms", async (req, res) => {
   const { roomType } = req.body;
-
   const roomTypeTemp = roomType || "all";
 
   try {
     if (roomTypeTemp === "all") {
-      await Room.find().then((rooms) => {
+      await Room.find({ booked: false }).then((rooms) => {
         res.status(200).json({ message: "Success", data: rooms });
       });
     } else {
-      await Room.find({ roomType: roomTypeTemp }).then((rooms) => {
-        res.status(200).json({ message: "Success", data: rooms });
-      });
+      await Room.find({ roomType: roomTypeTemp, booked: false }).then(
+        (rooms) => {
+          res.status(200).json({ message: "Success", data: rooms });
+        }
+      );
     }
   } catch (error) {
     console.log(error);
@@ -67,6 +69,10 @@ router.post("/bookRoom", async (req, res) => {
       if (room.booked === true) {
         return res.status(422).json({ message: "Room is already booked." });
       } else {
+        checkout()
+          .then((url) => response.redirect(url))
+          .catch((error) => console.log(error));
+
         reservation.save().then(() => {
           res.status(200).json({ message: "Reservation added successfully" });
         });

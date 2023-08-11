@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const multer = require("../config/multer");
+const cloudinary = require("../config/cloudinary");
 
 const Employee = require("../models/employee");
 const Room = require("../models/room");
@@ -18,10 +20,35 @@ router.get("/employees", async (req, res) => {
   }
 });
 
-router.post("/employee/create", async (req, res) => {
-  const { name, image, cnic, phone, email, salary, status } = req.body;
+router.get("/availableEmployees", async (req, res) => {
+  try {
+    const employees = await Employee.find({ status: "available" });
+    let employeesTemp = [];
+    employees.forEach((employee) => {
+      employeesTemp.push({
+        id: employee._id,
+        name: employee.name,
+      });
+    });
+    res.status(200).json({ message: "Success", data: employeesTemp });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while fetching employees." });
+  }
+});
 
-  if (!name || !image || !cnic || !phone || !email || !salary || !status)
+router.post("/employee/create", multer.single("image"), async (req, res) => {
+  const { name, cnic, phone, email, salary, status } = req.body;
+
+  const upload = await cloudinary.v2.uploader
+    .upload(req.file.path)
+    .catch((err) => {
+      console.log(err);
+    });
+
+  if (!name || !upload || !cnic || !phone || !email || !salary || !status)
     return res.status(422).json({ message: "Required fields are not filled." });
 
   await Employee.findOne({ email: email }).then((employee) => {
@@ -31,7 +58,7 @@ router.post("/employee/create", async (req, res) => {
 
   const employee = new Employee({
     name,
-    image,
+    image: upload.secure_url,
     cnic,
     phone,
     email,
@@ -48,14 +75,14 @@ router.post("/employee/create", async (req, res) => {
   }
 });
 
-router.delete("/employee/delete", async (req, res) => {
-  const { email } = req.body;
+router.delete("/employee/delete/:id", async (req, res) => {
+  const employeeId = req.params.id;
 
-  if (!email)
+  if (!employeeId)
     return res.status(422).json({ message: "Required fields are not filled." });
 
   try {
-    await Employee.findOneAndDelete({ email: email }).then(() => {
+    await Employee.findOneAndDelete({ _id: employeeId }).then(() => {
       res.status(200).json({ message: "Employee deleted successfully." });
     });
   } catch (error) {
@@ -65,7 +92,29 @@ router.delete("/employee/delete", async (req, res) => {
 
 /* Rooms Routes */
 
-router.get("/rooms", async (req, res) => {});
+router.get("/rooms", async (req, res) => {
+  const { roomType } = req.body;
+  const roomTypeTemp = roomType || "all";
+
+  try {
+    if (roomTypeTemp === "all") {
+      await Room.find({ booked: false }).then((rooms) => {
+        res.status(200).json({ message: "Success", data: rooms });
+      });
+    } else {
+      await Room.find({ roomType: roomTypeTemp, booked: false }).then(
+        (rooms) => {
+          res.status(200).json({ message: "Success", data: rooms });
+        }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while fetching rooms." });
+  }
+});
 
 router.post("/room/create", async (req, res) => {
   const {
