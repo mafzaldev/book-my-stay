@@ -1,18 +1,24 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Route, Routes } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
-import Navbar from "./components/Navbar";
-import AdminDashboard from "./pages/Admin/Dashboard";
-import CustomerDashboard from "./pages/Customer/Dashboard";
-import Home from "./pages/Common/Home";
-import Signup from "./pages/Common/Signup";
-import Login from "./pages/Common/Login";
 
-import useUserStore from "./stores/userStore";
+import Navbar from "./components/Navbar";
+import AddEmployee from "./pages/Admin/AddEmployee";
+import AddRoom from "./pages/Admin/AddRoom";
+import Bookings from "./pages/Admin/Bookings";
+import AdminDashboard from "./pages/Admin/Dashboard";
+import Employees from "./pages/Admin/Employees";
+import Rooms from "./pages/Admin/Rooms";
+import Contact from "./pages/Common/Contact";
+import Home from "./pages/Common/Home";
+import Login from "./pages/Common/Login";
+import NotFound from "./pages/Common/NotFound";
+import Signup from "./pages/Common/Signup";
+import CustomerDashboard from "./pages/Customer/Dashboard";
 
 import { UserType } from "./lib/utils";
-import Contact from "./pages/Common/Contact";
-import NotFound from "./pages/Common/NotFound";
+import useUserStore from "./stores/userStore";
 
 function App() {
   const { role, isLoggedIn, login } = useUserStore();
@@ -40,6 +46,7 @@ function App() {
           <Route path="/login" element={<Login />} />{" "}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
       </>
     );
   }
@@ -51,20 +58,26 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/addRoom" element={<AddRoom />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/addEmployee" element={<AddEmployee />} />
+          <Route path="/bookings" element={<Bookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
       </>
     );
   } else if (userType === UserType.Customer) {
     return (
       <>
-        {" "}
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<CustomerDashboard />} />{" "}
+          <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
       </>
     );
   }

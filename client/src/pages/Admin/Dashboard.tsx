@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import {
+  BookmarkIcon,
   BuildingOfficeIcon,
   UserGroupIcon,
-  BookmarkIcon,
 } from "@heroicons/react/24/outline";
-
-import MetricCard from "../../components/MetricCard";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ControlCard from "../../components/ControlCard";
+import MetricCard from "../../components/MetricCard";
+import { sendToast } from "../../lib/utils";
 
 const managementControls = [
   {
@@ -15,7 +16,7 @@ const managementControls = [
     shortDescription:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     icon: <BuildingOfficeIcon className="h-24 w-24 text-indigo-700" />,
-    onClick: () => {},
+    route: "/rooms",
   },
   {
     id: 2,
@@ -23,7 +24,7 @@ const managementControls = [
     shortDescription:
       "Maxime, numquam. Doloremque deserunt voluptatum aperiam.",
     icon: <UserGroupIcon className="h-24 w-24 text-indigo-700" />,
-    onClick: () => {},
+    route: "/employees",
   },
   {
     id: 3,
@@ -31,11 +32,12 @@ const managementControls = [
     shortDescription:
       "Provident veniam id optio, molestiae officia ea ullamad.",
     icon: <BookmarkIcon className="h-24 w-24 text-indigo-700" />,
-    onClick: () => {},
+    route: "/bookings",
   },
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [dashboardMetrics, setDashboardMetrics] = useState({
     totalRooms: 0,
     occupiedRooms: 0,
@@ -44,18 +46,24 @@ const Dashboard = () => {
     totalRevenue: 0,
   });
 
-  useEffect(() => {
-    const fetchDashboardMetrics = async () => {
+  const fetchDashboardMetrics = useCallback(async () => {
+    try {
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_BASE_URL}/admin/dashboard`,
       );
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
         console.log(parsedData.message);
+        sendToast("error", parsedData.message);
         return;
       }
       setDashboardMetrics(parsedData.data);
-    };
+    } catch (error: any) {
+      sendToast("error", error.message);
+    }
+  }, []);
+
+  useEffect(() => {
     fetchDashboardMetrics();
   }, []);
 
@@ -103,7 +111,7 @@ const Dashboard = () => {
                 control={control.title}
                 icon={control.icon}
                 shortDescription={control.shortDescription ?? ""}
-                onClick={control.onClick}
+                onClick={() => navigate(control.route)}
               />
             ))}
           </div>

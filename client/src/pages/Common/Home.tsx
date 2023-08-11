@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import useUserStore from "../../stores/userStore";
 import { UserType } from "../../lib/utils";
+import useUserStore from "../../stores/userStore";
 
 const Home = () => {
   const { isLoggedIn, role } = useUserStore();
