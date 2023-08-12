@@ -11,11 +11,9 @@ const roomSchema = new mongoose.Schema({
     enum: ["Single", "Double"],
     required: true,
   },
-  servantName: {
+  servantId: {
     type: String,
-  },
-  servantContact: {
-    type: String,
+    required: true,
   },
   pricePerDay: {
     type: Number,

@@ -90,6 +90,13 @@ const Employees = () => {
                         <p className="text-md font-medium text-gray-600">
                           {employee.phone}
                         </p>
+                        <p className="text-md font-medium text-gray-600">
+                          Salary:{" "}
+                          <span className="text-lg font-bold">
+                            {employee.salary}
+                          </span>
+                          <span className="text-xs">PKR</span>
+                        </p>
                       </div>
                       <div
                         className="cursor-pointer rounded-lg bg-red-500 p-1 hover:shadow-sm"
@@ -98,10 +105,6 @@ const Employees = () => {
                         <TrashIcon className="h-7 w-7 text-white" />
                       </div>
                     </div>
-                    <p className="mt-2 text-center text-lg font-medium text-gray-700">
-                      {employee.salary}
-                      <span className="text-sm">PKR</span>
-                    </p>
                   </div>
                 );
               })}

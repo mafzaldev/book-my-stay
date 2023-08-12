@@ -4,6 +4,15 @@ import { useNavigate } from "react-router-dom";
 import SelectMenu from "../../components/SelectMenu";
 import { sendToast } from "../../lib/utils";
 
+type troomTypes = {
+  [key: string]: string;
+};
+
+const roomTypes: troomTypes = {
+  "1": "Single",
+  "2": "Double",
+};
+
 export default function AddRoom() {
   const navigate = useNavigate();
   const [file, setFile] = useState<File>();
@@ -13,7 +22,7 @@ export default function AddRoom() {
 
   const [formState, setFormState] = useState({
     roomNo: "",
-    roomType: "",
+    roomType: "1",
     pricePerDay: "",
     roomDescription: "",
     servantId: "",
@@ -51,7 +60,7 @@ export default function AddRoom() {
       !formState.roomDescription ||
       !file
     ) {
-      alert("One or more fields are empty. or try again.");
+      alert("One or more fields are empty. Check the dropdowns.");
       console.log(formState);
       return;
     }
@@ -59,11 +68,11 @@ export default function AddRoom() {
 
     const formData = new FormData();
     formData.append("roomNo", formState.roomNo);
-    formData.append("roomType", formState.roomType);
-    formData.append("pricePerDay", formState.pricePerDay);
-    formData.append("roomDescription", formState.roomDescription);
+    formData.append("roomType", roomTypes[formState.roomType]);
     formData.append("servantId", formState.servantId);
-    formData.append("image", file!);
+    formData.append("pricePerDay", formState.pricePerDay);
+    formData.append("roomImage", file!);
+    formData.append("roomDescription", formState.roomDescription);
 
     const requestOptions = {
       method: "POST",
@@ -189,7 +198,7 @@ export default function AddRoom() {
                       roomDescription: e.target.value,
                     })
                   }
-                  className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
+                  className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block h-48 w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
                   placeholder="Room Description"
                   required
                 />
@@ -211,7 +220,10 @@ export default function AddRoom() {
                   required
                 />
               </div>
-              <label htmlFor="file-input" className="sr-only bg-slate-400">
+              <label
+                htmlFor="file-input"
+                className="block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
                 Choose Image
               </label>
               <input

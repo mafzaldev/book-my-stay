@@ -2,8 +2,9 @@ const router = require("express").Router();
 const Room = require("../models/room");
 const Reservation = require("../models/reservation");
 const TempReservation = require("../models/tempReservation");
+const Employee = require("../models/employee");
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
-const { checkout, getCurrentDate } = require("../lib");
+const { checkout } = require("../lib");
 
 router.get("/rooms", async (req, res) => {
   const { roomType } = req.body;
@@ -11,13 +12,33 @@ router.get("/rooms", async (req, res) => {
 
   try {
     if (roomTypeTemp === "all") {
-      await Room.find({ booked: false }).then((rooms) => {
-        res.status(200).json({ message: "Success", data: rooms });
+      await Room.find({ booked: false }).then(async (rooms) => {
+        const roomsTemp = await Promise.all(
+          rooms.map(async (room) => {
+            const employee = await Employee.findOne({ _id: room.servantId });
+            if (employee) {
+              room.servantId = employee.name;
+              return room;
+            }
+          })
+        );
+
+        res.status(200).json({ message: "Success", data: roomsTemp });
       });
     } else {
       await Room.find({ roomType: roomTypeTemp, booked: false }).then(
-        (rooms) => {
-          res.status(200).json({ message: "Success", data: rooms });
+        async (rooms) => {
+          const roomsTemp = await Promise.all(
+            rooms.map(async (room) => {
+              const employee = await Employee.findOne({ _id: room.servantId });
+              if (employee) {
+                room.servantId = employee.name;
+                return room;
+              }
+            })
+          );
+
+          res.status(200).json({ message: "Success", data: roomsTemp });
         }
       );
     }

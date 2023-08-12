@@ -29,7 +29,7 @@ export default function AddEmployee() {
       !formState.salary ||
       !file
     ) {
-      alert("One or more fields are empty.");
+      alert("One or more fields are empty. Check the dropdowns.");
       console.log(formState);
       return;
     }
@@ -214,8 +214,11 @@ export default function AddEmployee() {
                 required
               />
             </div>
-            <label htmlFor="file-input" className="sr-only bg-slate-400">
-              Choose file
+            <label
+              htmlFor="file-input"
+              className="block text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Choose Image
             </label>
             <input
               id="image"

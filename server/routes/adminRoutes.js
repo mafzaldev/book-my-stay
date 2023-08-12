@@ -92,21 +92,19 @@ router.delete("/employee/delete/:id", async (req, res) => {
 
 /* Rooms Routes */
 router.get("/rooms", async (req, res) => {
-  const { roomType } = req.body;
-  const roomTypeTemp = roomType || "all";
-
   try {
-    if (roomTypeTemp === "all") {
-      await Room.find({ booked: false }).then((rooms) => {
-        res.status(200).json({ message: "Success", data: rooms });
-      });
-    } else {
-      await Room.find({ roomType: roomTypeTemp, booked: false }).then(
-        (rooms) => {
-          res.status(200).json({ message: "Success", data: rooms });
-        }
+    await Room.find({ booked: false }).then(async (rooms) => {
+      const roomsTemp = await Promise.all(
+        rooms.map(async (room) => {
+          const employee = await Employee.findOne({ _id: room.servantId });
+          if (employee) {
+            room.servantId = employee.name;
+            return room;
+          }
+        })
       );
-    }
+      res.status(200).json({ message: "Success", data: roomsTemp });
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -115,24 +113,22 @@ router.get("/rooms", async (req, res) => {
   }
 });
 
-router.post("/room/create", async (req, res) => {
-  const {
-    roomNo,
-    roomType,
-    servantName,
-    servantContact,
-    pricePerDay,
-    roomImage,
-    roomDescription,
-  } = req.body;
+router.post("/room/create", multer.single("roomImage"), async (req, res) => {
+  const { roomNo, roomType, servantId, pricePerDay, roomDescription } =
+    req.body;
+
+  const upload = await cloudinary.v2.uploader
+    .upload(req.file.path)
+    .catch((err) => {
+      console.log(err);
+    });
 
   if (
     !roomNo ||
     !roomType ||
-    !servantName ||
-    !servantContact ||
+    !servantId ||
     !pricePerDay ||
-    !roomImage ||
+    !upload ||
     !roomDescription
   )
     return res.status(422).json({ message: "Required fields are not filled." });
@@ -140,10 +136,9 @@ router.post("/room/create", async (req, res) => {
   const room = new Room({
     roomNo,
     roomType,
-    servantName,
-    servantContact,
+    servantId,
     pricePerDay,
-    roomImage,
+    roomImage: upload.secure_url,
     roomDescription,
   });
 
