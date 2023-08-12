@@ -91,7 +91,6 @@ router.delete("/employee/delete/:id", async (req, res) => {
 });
 
 /* Rooms Routes */
-
 router.get("/rooms", async (req, res) => {
   const { roomType } = req.body;
   const roomTypeTemp = roomType || "all";
