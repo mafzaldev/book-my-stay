@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Customer = require("../models/customer");
-const { adminName, adminEmail, adminPassword } = require("../lib");
 
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
@@ -36,12 +35,14 @@ router.post("/login", async (req, res) => {
   if (!email || !password)
     return res.status(422).json({ error: "Required fields are not filled." });
 
-  const isAdmin = email === adminEmail && password === adminPassword;
+  const isAdmin =
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD;
   if (isAdmin) {
     return res.status(200).json({
       message: "Success",
       data: {
-        name: adminName,
+        name: process.env.ADMIN_NAME,
         email: email,
         role: "admin",
       },

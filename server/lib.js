@@ -1,6 +1,3 @@
-const adminName = "Afzal";
-const adminEmail = "admin@bookmystay.com";
-const adminPassword = "tXZm2FpcZz2rsj";
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 async function checkout({ roomNo, price, image, description }) {
@@ -27,25 +24,6 @@ async function checkout({ roomNo, price, image, description }) {
   return session.url;
 }
 
-const getCurrentDate = () => {
-  const unixTime = 1642698000 * 1000;
-  const format = {
-    weekday: "long",
-    day: "numeric",
-    month: "2-digit",
-    year: "numeric",
-  };
-  const date = new Date(unixTime)
-    .toLocaleDateString("en-US", format)
-    .split("T")[0];
-  console.log(date);
-  return date;
-};
-
 module.exports = {
-  adminName,
-  adminEmail,
-  adminPassword,
   checkout,
-  getCurrentDate,
 };

@@ -59,6 +59,8 @@ router.post("/bookRoom", async (req, res) => {
     numberOfAdults,
   } = req.body;
 
+  console.log(req.body);
+
   if (
     !roomNo ||
     !customerPhone ||
@@ -148,7 +150,7 @@ router.get("/payment/:sessionId", async (req, res) => {
 
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (session.payment_status === "unpaid") {
-    return res.json({ message: "Payment is not completed.", session });
+    return res.redirect("http://localhost:5173/rooms");
   }
 
   console.log(tempReservations.length);
@@ -168,7 +170,7 @@ router.get("/payment/:sessionId", async (req, res) => {
     room.booked = true;
     room.save();
   });
-  return res.json({ object_id: reservation._id, session });
+  return res.redirect("http://localhost:5173/dashboard");
 });
 
 module.exports = router;
