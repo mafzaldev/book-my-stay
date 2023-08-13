@@ -66,7 +66,7 @@ const Rooms = () => {
                       <div
                         key={room._id}
                         onClick={() => navigate(`/bookRoom/${room.roomNo}`)}
-                        className="rounded-lg bg-white pb-5 transition-transform duration-300 hover:-translate-y-1 hover:drop-shadow-md"
+                        className="cursor-pointer rounded-lg bg-white pb-5 transition-transform duration-300 hover:-translate-y-1 hover:drop-shadow-md"
                       >
                         <div className="relative w-full overflow-hidden rounded-lg bg-gray-200">
                           <div className="absolute right-3 top-3 rounded-lg bg-white px-1 py-1 drop-shadow-md">
