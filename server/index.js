@@ -42,7 +42,8 @@ app.use("/customer", customerRoutes);
 app.listen(PORT, () => {
   mongoose
     .connect(
-      "mongodb+srv://mafzaldev:FhQLd11y6h6hmjZ6@default.em4p108.mongodb.net/BookMyStay?retryWrites=true&w=majority",
+      "mongodb+srv://mafzaldev:LtnymOcfGe46q7sH@default.hv9xkjp.mongodb.net/BookMyStay?retryWrites=true&w=majority",
+      // "mongodb+srv://mafzaldev:FhQLd11y6h6hmjZ6@default.em4p108.mongodb.net/BookMyStay?retryWrites=true&w=majority",
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
