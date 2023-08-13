@@ -2,6 +2,14 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SelectMenu from "../../components/SelectMenu";
 import { sendToast } from "../../lib/utils";
+type temployeeTypes = {
+  [key: string]: string;
+};
+
+const employeeTypes: temployeeTypes = {
+  "1": "Manager",
+  "2": "Servant",
+};
 
 export default function AddEmployee() {
   const navigate = useNavigate();
@@ -31,6 +39,7 @@ export default function AddEmployee() {
     ) {
       alert("One or more fields are empty. Check the dropdowns.");
       console.log(formState);
+      console.log(file);
       return;
     }
     setIsUploading(true);
@@ -40,7 +49,8 @@ export default function AddEmployee() {
     formData.append("email", formState.email);
     formData.append("cnic", formState.cnic);
     formData.append("phone", formState.phone);
-    formData.append("status", formState.status);
+    formData.append("role", employeeTypes[formState.status]);
+    formData.append("status", "available");
     formData.append("salary", formState.salary);
     formData.append("image", file!);
 
@@ -85,6 +95,7 @@ export default function AddEmployee() {
     } else {
       alert("Please pick a valid image.");
     }
+    console.log(file);
   };
 
   const pickStatusHandler = (status: string) => {

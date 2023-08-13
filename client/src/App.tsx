@@ -15,7 +15,10 @@ import Home from "./pages/Common/Home";
 import Login from "./pages/Common/Login";
 import NotFound from "./pages/Common/NotFound";
 import Signup from "./pages/Common/Signup";
+
+import BookRoom from "./pages/Customer/BookRoom";
 import CustomerDashboard from "./pages/Customer/Dashboard";
+import CustomerRooms from "./pages/Customer/Rooms";
 
 import { UserType } from "./lib/utils";
 import useUserStore from "./stores/userStore";
@@ -75,6 +78,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/rooms" element={<CustomerRooms />} />
+          <Route path="/bookRoom/:roomNo" element={<BookRoom />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

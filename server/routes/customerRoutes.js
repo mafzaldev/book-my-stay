@@ -8,7 +8,7 @@ const { checkout } = require("../lib");
 
 router.get("/rooms", async (req, res) => {
   const { roomType } = req.body;
-  const roomTypeTemp = roomType || "all";
+  const roomTypeTemp = roomType ? roomType : "all";
 
   try {
     if (roomTypeTemp === "all") {
@@ -22,7 +22,6 @@ router.get("/rooms", async (req, res) => {
             }
           })
         );
-
         res.status(200).json({ message: "Success", data: roomsTemp });
       });
     } else {
@@ -37,7 +36,6 @@ router.get("/rooms", async (req, res) => {
               }
             })
           );
-
           res.status(200).json({ message: "Success", data: roomsTemp });
         }
       );
@@ -95,7 +93,15 @@ router.post("/bookRoom", async (req, res) => {
         tempReservation.save();
         checkout(roomPaymentDetails)
           .then((url) => res.json({ url }))
-          .catch((error) => console.log(error));
+          .catch(async (error) => {
+            await TempReservation.findOneAndDelete({
+              _id: tempReservation._id,
+            }).then(() => {
+              res
+                .status(500)
+                .json({ message: "Error occurred while booking." });
+            });
+          });
       }
     });
   } catch (error) {

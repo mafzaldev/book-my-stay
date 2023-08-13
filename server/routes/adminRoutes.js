@@ -22,7 +22,10 @@ router.get("/employees", async (req, res) => {
 
 router.get("/availableEmployees", async (req, res) => {
   try {
-    const employees = await Employee.find({ status: "available" });
+    const employees = await Employee.find({
+      status: "available",
+      role: "Servant",
+    });
     let employeesTemp = [];
     employees.forEach((employee) => {
       employeesTemp.push({
@@ -40,12 +43,15 @@ router.get("/availableEmployees", async (req, res) => {
 });
 
 router.post("/employee/create", multer.single("image"), async (req, res) => {
-  const { name, cnic, phone, email, salary, status } = req.body;
+  const { name, cnic, phone, email, role, salary, status } = req.body;
 
   const upload = await cloudinary.v2.uploader
     .upload(req.file.path)
     .catch((err) => {
       console.log(err);
+      return res
+        .status(500)
+        .json({ message: "Error occurred while uploading image." });
     });
 
   if (!name || !upload || !cnic || !phone || !email || !salary || !status)
@@ -62,6 +68,7 @@ router.post("/employee/create", multer.single("image"), async (req, res) => {
     cnic,
     phone,
     email,
+    role,
     salary,
     status,
   });
@@ -71,7 +78,9 @@ router.post("/employee/create", multer.single("image"), async (req, res) => {
       res.status(200).json({ message: "Employee created successfully." });
     });
   } catch (error) {
-    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while adding employee." });
   }
 });
 
@@ -87,6 +96,9 @@ router.delete("/employee/delete/:id", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while uploading image." });
   }
 });
 
@@ -121,6 +133,9 @@ router.post("/room/create", multer.single("roomImage"), async (req, res) => {
     .upload(req.file.path)
     .catch((err) => {
       console.log(err);
+      return res
+        .status(500)
+        .json({ message: "Error occurred while uploading image." });
     });
 
   if (
@@ -143,11 +158,18 @@ router.post("/room/create", multer.single("roomImage"), async (req, res) => {
   });
 
   try {
-    await room.save().then(() => {
+    await room.save().then(async () => {
+      await Employee.findOneAndUpdate(
+        { _id: servantId },
+        { status: "unavailable" }
+      );
       res.status(200).json({ message: "Room added successfully." });
     });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while adding room." });
   }
 });
 

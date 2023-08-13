@@ -29,6 +29,7 @@ const employeeSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: ["available", "unavailable"],
     required: true,
   },
   salary: {

@@ -76,7 +76,7 @@ const Employees = () => {
                       <img
                         src={employee.image}
                         alt={employee.name}
-                        className="w-full object-contain object-center"
+                        className="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div className="flex items-center justify-between px-3">
