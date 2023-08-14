@@ -41,13 +41,10 @@ app.use("/customer", customerRoutes);
 
 app.listen(PORT, () => {
   mongoose
-    .connect(
-      "mongodb+srv://mafzaldev:FhQLd11y6h6hmjZ6@default.em4p108.mongodb.net/BookMyStay?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    )
+    .connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(() => {
       console.log("Database connected");
     });
