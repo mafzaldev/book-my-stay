@@ -122,12 +122,6 @@ const Dashboard = () => {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Price(PKR)
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
                         CheckIn Date
                       </th>
                       <th
@@ -150,6 +144,24 @@ const Dashboard = () => {
                       </th>
                       <th
                         scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Day(s)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Price(PKR)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Total Bill(PKR)
+                      </th>
+                      <th
+                        scope="col"
                         className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                       >
                         <span className="sr-only">Edit</span>
@@ -166,9 +178,7 @@ const Dashboard = () => {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.customerPhone}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {booking.price}
-                        </td>
+
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {getDateFromTimeStamp(booking.checkIn)}
                         </td>
@@ -182,6 +192,15 @@ const Dashboard = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.numberOfChildren}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.days}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.price}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.price * booking.days}
                         </td>
                         <td className="relative mr-6 whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-0">
                           {booking.checkOut == NULL_TIMESTAMP ? (

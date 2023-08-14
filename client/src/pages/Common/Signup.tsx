@@ -1,5 +1,6 @@
 import { SyntheticEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { sendToast } from "../../lib/utils";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -15,20 +16,25 @@ export default function Signup() {
     e.preventDefault();
     console.log(formState);
 
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth/signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formState),
         },
-        body: JSON.stringify(formState),
-      },
-    );
-    const data = await response.json();
-
-    if (data.message === "Success") {
+      );
+      const data = await response.json();
+      if (data.message !== "Success") {
+        sendToast("error", data.message);
+        return;
+      }
       navigate("/login");
+    } catch (error: any) {
+      sendToast("error", "Error occured while signing up.");
     }
   };
 

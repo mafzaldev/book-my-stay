@@ -81,6 +81,7 @@ function App() {
           <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/rooms" element={<CustomerRooms />} />
           <Route path="/bookRoom/:roomNo" element={<BookRoom />} />
+          <Route path="/contact" element={<Contact />} />
           <Route
             path="/checkOutRoom/:reservationId/:roomNo"
             element={<CheckOutRoom />}

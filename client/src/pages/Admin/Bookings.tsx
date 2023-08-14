@@ -78,12 +78,7 @@ const Bookings = () => {
                       >
                         Customer Phone
                       </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Price(PKR)
-                      </th>
+
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -110,6 +105,24 @@ const Bookings = () => {
                       </th>
                       <th
                         scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Day(s)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Price(PKR)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Total Bill(PKR)
+                      </th>
+                      <th
+                        scope="col"
                         className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Rating (
@@ -131,9 +144,6 @@ const Bookings = () => {
                           {booking.customerPhone}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {booking.price}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {getDateFromTimeStamp(booking.checkIn)}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -146,6 +156,15 @@ const Bookings = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.numberOfChildren}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.days}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.price}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.price * booking.days}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.rating}

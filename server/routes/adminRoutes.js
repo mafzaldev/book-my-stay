@@ -204,7 +204,7 @@ router.get("/dashboard", async (req, res) => {
       totalBookings = reservations.length;
 
       reservations.forEach((reservation) => {
-        totalRevenue += reservation.price;
+        totalRevenue += reservation.price * reservation.days;
       });
     });
 

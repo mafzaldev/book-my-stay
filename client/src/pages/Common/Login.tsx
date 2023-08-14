@@ -1,6 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
+import { sendToast } from "../../lib/utils";
 import useUserStore from "../../stores/userStore";
 
 export default function Login() {
@@ -19,20 +20,24 @@ export default function Login() {
     e.preventDefault();
     console.log(formState);
 
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formState),
         },
-        body: JSON.stringify(formState),
-      },
-    );
-    const parsedData = await response.json();
-
-    if (parsedData.message === "Success") {
+      );
+      const parsedData = await response.json();
       console.log(parsedData);
+
+      if (parsedData.message !== "Success") {
+        sendToast("error", parsedData.message);
+        return;
+      }
       login(parsedData.data.name, parsedData.data.email, parsedData.data.role);
       setUserState(() => ({
         name: parsedData.data.name,
@@ -40,6 +45,8 @@ export default function Login() {
         role: parsedData.data.role,
       }));
       navigate("/dashboard");
+    } catch (error) {
+      sendToast("error", "Error occured while authenticating.");
     }
   };
 

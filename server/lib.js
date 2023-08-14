@@ -1,6 +1,6 @@
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
-async function checkout({ roomNo, price, image, description }) {
+async function checkout({ roomNo, price, quantity, image, description }) {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -9,12 +9,12 @@ async function checkout({ roomNo, price, image, description }) {
           currency: "pkr",
           product_data: {
             name: roomNo,
-            description: description,
+            description: description + "Note: Quanity is number of days.",
             images: [image],
           },
           unit_amount: price * 100,
         },
-        quantity: 1,
+        quantity: quantity,
       },
     ],
     mode: "payment",

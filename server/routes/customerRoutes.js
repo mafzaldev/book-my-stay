@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 const Room = require("../models/room");
 const Reservation = require("../models/reservation");
 const TempReservation = require("../models/tempReservation");
@@ -53,16 +54,16 @@ router.get("/room/:roomNo", async (req, res) => {});
 router.post("/room/book", async (req, res) => {
   const {
     roomNo,
+    days,
     customerEmail,
     customerPhone,
     numberOfChildren,
     numberOfAdults,
   } = req.body;
 
-  console.log(req.body);
-
   if (
     !roomNo ||
+    !days ||
     !customerPhone ||
     !customerEmail ||
     !numberOfChildren ||
@@ -78,21 +79,23 @@ router.post("/room/book", async (req, res) => {
         const tempReservation = new TempReservation({
           roomNo,
           customerPhone,
+          days,
           price: room.pricePerDay,
           checkIn: new Date().toLocaleDateString(),
           customerEmail,
           numberOfChildren,
           numberOfAdults,
         });
+        tempReservation.save();
 
         roomPaymentDetails = {
           roomNo: roomNo,
+          quantity: days,
           price: room.pricePerDay,
           description: room.roomDescription,
           image: room.roomImage,
         };
 
-        tempReservation.save();
         checkout(roomPaymentDetails)
           .then((url) => res.json({ url }))
           .catch(async (error) => {
@@ -174,11 +177,10 @@ router.get("/payment/:sessionId", async (req, res) => {
     return res.redirect(`${process.env.CLIENT_URL}/rooms`);
   }
 
-  console.log(tempReservations.length);
-
   const reservation = new Reservation({
     roomNo: tempReservations[0].roomNo,
     price: tempReservations[0].price,
+    days: tempReservations[0].days,
     checkIn: tempReservations[0].checkIn,
     customerPhone: tempReservations[0].customerPhone,
     customerEmail: tempReservations[0].customerEmail,

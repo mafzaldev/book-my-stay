@@ -62,7 +62,7 @@ const Rooms = () => {
                         onClick={() => navigate(`/bookRoom/${room.roomNo}`)}
                         className="cursor-pointer rounded-lg bg-white pb-5 transition-transform duration-300 hover:-translate-y-1 hover:drop-shadow-md"
                       >
-                        <div className="relative w-full overflow-hidden rounded-lg bg-gray-200">
+                        <div className="relative h-44 w-full overflow-hidden rounded-lg bg-gray-200">
                           <div className="absolute right-3 top-3 rounded-lg bg-white px-1 py-1 drop-shadow-md">
                             {room.roomType}
                           </div>
@@ -79,7 +79,7 @@ const Rooms = () => {
                           <img
                             src={room.roomImage}
                             alt={room.name}
-                            className="w-full object-cover object-center"
+                            className="h-full w-full object-cover object-center"
                           />
                         </div>
                         <div className="flex items-center justify-between px-3">
@@ -89,11 +89,6 @@ const Rooms = () => {
                             </h3>
                             <p className="text-md font-medium text-gray-600">
                               {room.roomDescription}
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Tenetur laudantium ipsa voluptatibus modi
-                              sit at quam delectus assumenda eveniet hic,
-                              pariatur molestias est culpa expedita facere
-                              consectetur sed iste. Odit?
                             </p>
                             <p className="text-md font-medium text-gray-600">
                               Servant Name:{" "}

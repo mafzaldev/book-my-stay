@@ -9,6 +9,7 @@ export default function BookRoom() {
   const [isBooking, setIsBooking] = useState<boolean>(false);
   const [formState, setFormState] = useState({
     roomNo: "",
+    days: "",
     customerPhone: "",
     numberOfChildren: "",
     numberOfAdults: "",
@@ -27,6 +28,7 @@ export default function BookRoom() {
 
     if (
       !formState.roomNo ||
+      !formState.days ||
       !formState.customerPhone ||
       !formState.numberOfChildren ||
       !formState.numberOfAdults
@@ -44,6 +46,7 @@ export default function BookRoom() {
       },
       body: JSON.stringify({
         roomNo: formState.roomNo,
+        days: formState.days,
         customerEmail: email,
         customerPhone: formState.customerPhone,
         numberOfAdults: formState.numberOfAdults,
@@ -69,6 +72,7 @@ export default function BookRoom() {
     setIsBooking(false);
     setFormState({
       roomNo: "",
+      days: "",
       customerPhone: "",
       numberOfAdults: "",
       numberOfChildren: "",
@@ -76,6 +80,8 @@ export default function BookRoom() {
   };
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    if (e.currentTarget.id === "days" && e.currentTarget.value.length > 2)
+      return;
     if (
       e.currentTarget.id === "numberOfAdults" &&
       e.currentTarget.value.length > 1
@@ -133,7 +139,7 @@ export default function BookRoom() {
                 htmlFor="customerPhone"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Email
+                Phone
               </label>
               <input
                 type="tel"
@@ -142,6 +148,23 @@ export default function BookRoom() {
                 onChange={handleChange}
                 className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
                 placeholder="03001234567"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="days"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Day(s)
+              </label>
+              <input
+                type="number"
+                id="days"
+                value={formState.days}
+                onChange={handleChange}
+                className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
+                placeholder="2"
                 required
               />
             </div>
