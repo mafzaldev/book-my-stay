@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { sendToast } from "../../lib/utils";
 import useUserStore from "../../stores/userStore";
 
-export default function AddEmployee() {
+export default function BookRoom() {
   const { roomNo } = useParams();
   const { email } = useUserStore();
   const [isBooking, setIsBooking] = useState<boolean>(false);
@@ -55,7 +55,7 @@ export default function AddEmployee() {
       console.table(requestOptions);
 
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/customer/bookRoom`,
+        `${import.meta.env.VITE_SERVER_BASE_URL}/customer/room/book`,
         requestOptions,
       );
       const data = await response.json();
@@ -66,13 +66,13 @@ export default function AddEmployee() {
       sendToast("error", error.message);
     }
 
-    // setIsBooking(false);
-    /*setFormState({
+    setIsBooking(false);
+    setFormState({
       roomNo: "",
       customerPhone: "",
       numberOfAdults: "",
       numberOfChildren: "",
-    });*/
+    });
   };
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {

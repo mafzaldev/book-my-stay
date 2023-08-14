@@ -1,10 +1,10 @@
-import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Fragment } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
+import { Link, useNavigate } from "react-router-dom";
 import useUserStore from "../stores/userStore";
-import { Link } from "react-router-dom";
 
 const user = {
   imageUrl: "https://img.freepik.com/free-icon/user_318-159711.jpg",
@@ -16,11 +16,13 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const { name, email, isLoggedIn, logout } = useUserStore();
+  const navigate = useNavigate();
   const [userState, setUserState] = useLocalStorage("userState", null);
 
   const handleLogout = () => {
     logout();
     setUserState(null);
+    navigate("/");
   };
 
   return (
@@ -118,7 +120,7 @@ export default function Navbar() {
                               <button
                                 type="button"
                                 onClick={handleLogout}
-                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                className="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                               >
                                 Sign Out
                               </button>
@@ -168,7 +170,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                    className="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                   >
                     Sign Out
                   </button>

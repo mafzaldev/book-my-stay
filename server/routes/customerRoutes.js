@@ -50,7 +50,7 @@ router.get("/rooms", async (req, res) => {
 
 router.get("/room/:roomNo", async (req, res) => {});
 
-router.post("/bookRoom", async (req, res) => {
+router.post("/room/book", async (req, res) => {
   const {
     roomNo,
     customerEmail,
@@ -112,34 +112,55 @@ router.post("/bookRoom", async (req, res) => {
   }
 });
 
-router.post("/cancelBooking", async (req, res) => {});
+router.post("/bookings", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const reservations = await Reservation.find({ customerEmail: email });
+    res.status(200).json({ message: "Success", data: reservations });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error occurred while fetching reservations." });
+  }
+});
 
-router.post("/rate", async (req, res) => {
+router.post("/room/checkout", async (req, res) => {
   const { reservationId, rating } = req.body;
 
   if (!reservationId || !rating)
     return res.status(422).json({ message: "Required fields are not filled." });
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
   try {
     await Reservation.findOne({ _id: reservationId }).then(
       async (reservation) => {
-        await Room.findOne({ roomNo: reservation.roomNo }).then((room) => {
-          if (room.booked === true) {
-            return res.status(422).json({ message: "Room is not booked." });
-          } else {
-            reservation.rating = rating;
-            reservation.save();
-            room.booked = true;
-            room.save();
-            res.status(200).json({ message: "Room rated successfully" });
+        await Room.findOne({ roomNo: reservation.roomNo }).then(
+          async (room) => {
+            if (room.booked === false) {
+              return res.status(422).json({ message: "Room is not booked." });
+            } else {
+              reservation.rating = rating;
+              reservation.checkOut = new Date().toLocaleDateString();
+              reservation.save();
+              room.booked = false;
+              room.save();
+              res.status(200).json({ message: "Room rated successfully" });
+              await session.commitTransaction();
+            }
           }
-        });
+        );
       }
     );
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Error occurred while rating room." });
+    await session.commitTransaction();
+    res
+      .status(500)
+      .json({ message: "Error occurred while checking out room." });
   }
+  session.endSession();
 });
 
 router.get("/payment/:sessionId", async (req, res) => {

@@ -1,4 +1,7 @@
+import { StarIcon } from "@heroicons/react/20/solid";
+
 import { Spinner } from "flowbite-react";
+
 import { useCallback, useEffect, useState } from "react";
 import { getDateFromTimeStamp, sendToast } from "../../lib/utils";
 
@@ -105,6 +108,14 @@ const Bookings = () => {
                       >
                         Children
                       </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Rating (
+                        <StarIcon className="inline-block h-4 w-4 text-yellow-300" />
+                        )
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
@@ -135,6 +146,9 @@ const Bookings = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.numberOfChildren}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {booking.rating}
                         </td>
                       </tr>
                     ))}

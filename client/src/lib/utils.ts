@@ -4,6 +4,8 @@ export const UserType = {
     Customer: "customer",
 }
 
+export const NULL_TIMESTAMP = "1970-01-01T00:00:00.000Z";
+
 
 export const sendToast = (type: string, message: string, className?: string) => {
     type === "success" ? toast.success(message, {

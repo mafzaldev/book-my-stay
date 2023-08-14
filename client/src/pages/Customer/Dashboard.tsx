@@ -1,9 +1,13 @@
 import { BuildingOfficeIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ControlCard from "../../components/ControlCard";
-import { getDateFromTimeStamp, sendToast } from "../../lib/utils";
+import {
+  NULL_TIMESTAMP,
+  getDateFromTimeStamp,
+  sendToast,
+} from "../../lib/utils";
 import useUserStore from "../../stores/userStore";
 
 const customerControls = [
@@ -24,10 +28,21 @@ const Dashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  };
+
   const fetchBookings = useCallback(async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/customer/bookings/${email}`,
+        `${import.meta.env.VITE_SERVER_BASE_URL}/customer/bookings/`,
+        requestOptions,
       );
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
@@ -72,7 +87,7 @@ const Dashboard = () => {
             ))}
           </div>
           <div>
-            <h2 className="mt-10 text-2xl font-bold leading-tight tracking-tight text-gray-800">
+            <h2 className="my-10 text-2xl font-bold leading-tight tracking-tight text-gray-800">
               History
             </h2>
             {loading ? (
@@ -133,6 +148,12 @@ const Dashboard = () => {
                       >
                         Children
                       </th>
+                      <th
+                        scope="col"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                      >
+                        <span className="sr-only">Edit</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
@@ -152,7 +173,7 @@ const Dashboard = () => {
                           {getDateFromTimeStamp(booking.checkIn)}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {booking.checkOut == "1970-01-01T00:00:00.000Z"
+                          {booking.checkOut == NULL_TIMESTAMP
                             ? "--"
                             : getDateFromTimeStamp(booking.checkOut)}
                         </td>
@@ -161,6 +182,18 @@ const Dashboard = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {booking.numberOfChildren}
+                        </td>
+                        <td className="relative mr-6 whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-0">
+                          {booking.checkOut == NULL_TIMESTAMP ? (
+                            <Link
+                              to={`/checkOutRoom/${booking._id}/${booking.roomNo}`}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              CheckOut
+                            </Link>
+                          ) : (
+                            "--"
+                          )}
                         </td>
                       </tr>
                     ))}

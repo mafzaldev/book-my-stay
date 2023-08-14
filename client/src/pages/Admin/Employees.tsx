@@ -28,6 +28,9 @@ const Employees = () => {
   }, []);
 
   const handleDelete = useCallback(async (id: any) => {
+    let promptValue = confirm("Are you sure you want to delete this employee?");
+    if (!promptValue) return;
+
     try {
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_BASE_URL}/admin/employee/delete/${id}`,
@@ -38,9 +41,13 @@ const Employees = () => {
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
         console.log(parsedData.message);
-        sendToast("error", parsedData.message);
+        sendToast(
+          "error",
+          "Employee could not be deleted, maybe employee is currently assigned to a room.",
+        );
         return;
       }
+      sendToast("success", "Employee deleted successfully");
     } catch (error: any) {
       sendToast("error", error.message);
     }

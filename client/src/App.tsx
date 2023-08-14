@@ -21,6 +21,7 @@ import CustomerDashboard from "./pages/Customer/Dashboard";
 import CustomerRooms from "./pages/Customer/Rooms";
 
 import { UserType } from "./lib/utils";
+import CheckOutRoom from "./pages/Customer/CheckOutRoom";
 import useUserStore from "./stores/userStore";
 
 function App() {
@@ -80,6 +81,10 @@ function App() {
           <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/rooms" element={<CustomerRooms />} />
           <Route path="/bookRoom/:roomNo" element={<BookRoom />} />
+          <Route
+            path="/checkOutRoom/:reservationId/:roomNo"
+            element={<CheckOutRoom />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
