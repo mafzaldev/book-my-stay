@@ -18,8 +18,8 @@ async function checkout({ roomNo, price, image, description }) {
       },
     ],
     mode: "payment",
-    success_url: `http://localhost:3000/customer/payment/{CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:3000/customer/payment/{CHECKOUT_SESSION_ID}`,
+    success_url: `${process.env.SERVER_URL}/customer/payment/{CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.SERVER_URL}/customer/payment/{CHECKOUT_SESSION_ID}`,
   });
   return session.url;
 }

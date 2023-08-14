@@ -218,4 +218,15 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
+router.get("/bookings", async (req, res) => {
+  try {
+    const reservations = await Reservation.find();
+    res.status(200).json({ message: "Success", data: reservations });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error occurred while fetching bookings." });
+  }
+});
+
 module.exports = router;

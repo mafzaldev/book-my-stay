@@ -150,7 +150,7 @@ router.get("/payment/:sessionId", async (req, res) => {
 
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (session.payment_status === "unpaid") {
-    return res.redirect("http://localhost:5173/rooms");
+    return res.redirect(`${process.env.CLIENT_URL}/rooms`);
   }
 
   console.log(tempReservations.length);
@@ -170,7 +170,7 @@ router.get("/payment/:sessionId", async (req, res) => {
     room.booked = true;
     room.save();
   });
-  return res.redirect("http://localhost:5173/dashboard");
+  return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
 });
 
 module.exports = router;

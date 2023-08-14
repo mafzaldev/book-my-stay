@@ -72,20 +72,20 @@ const Dashboard = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="flex h-screen items-center justify-center">
-          <Spinner />
-        </div>
-      ) : (
-        <div className="py-5">
-          <header>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl  font-bold leading-tight tracking-tight text-gray-900">
-                Dashboard
-              </h1>
+      <div className="py-5">
+        <header>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl  font-bold leading-tight tracking-tight text-gray-900">
+              Dashboard
+            </h1>
+          </div>
+        </header>
+        <main>
+          {loading ? (
+            <div className="flex h-96 items-center justify-center">
+              <Spinner />
             </div>
-          </header>
-          <main>
+          ) : (
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mt-5 grid grid-cols-2 items-center gap-5 md:grid-cols-4 lg:grid-cols-5">
                 <MetricCard
@@ -125,9 +125,9 @@ const Dashboard = () => {
                 ))}
               </div>
             </div>
-          </main>
-        </div>
-      )}
+          )}
+        </main>
+      </div>
     </>
   );
 };
