@@ -29,7 +29,6 @@ export default function CheckOutRoom() {
 
     if (!formState.rating) {
       alert("One or more fields are empty.");
-      console.log(formState);
       return;
     }
     setisSubmitting(true);

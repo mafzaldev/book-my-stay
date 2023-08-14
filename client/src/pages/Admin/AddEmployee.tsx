@@ -60,7 +60,6 @@ export default function AddEmployee() {
     };
 
     try {
-      console.log(requestOptions);
       fetch(
         `${import.meta.env.VITE_SERVER_BASE_URL}/admin/employee/create`,
         requestOptions,
@@ -95,7 +94,6 @@ export default function AddEmployee() {
     } else {
       alert("Please pick a valid image.");
     }
-    console.log(file);
   };
 
   const pickStatusHandler = (status: string) => {

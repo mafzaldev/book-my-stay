@@ -16,7 +16,6 @@ const Bookings = () => {
       );
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
-        console.log(parsedData.message);
         sendToast("error", parsedData.message);
         return;
       }

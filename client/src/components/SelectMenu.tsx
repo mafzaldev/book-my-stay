@@ -21,7 +21,6 @@ export default function SelectMenu({
   const onSelected = (value: any) => {
     setSelected(value);
     let selected = options.find((option: any) => option.name === value);
-    console.log(selected.id);
     pickStatus(selected.id);
   };
 

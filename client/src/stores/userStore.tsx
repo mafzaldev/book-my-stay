@@ -15,6 +15,7 @@ const useUserStore = create<UserState>((set) => ({
   role: "",
   isLoggedIn: false,
   login: (name, email, role) => {
+    if (name === "" || email === "" || role === "") return;
     set({ name, email, role, isLoggedIn: true });
   },
   logout: () => set({ name: "", email: "", role: "", isLoggedIn: false }),

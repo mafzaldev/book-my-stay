@@ -16,7 +16,6 @@ const Employees = () => {
       );
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
-        console.log(parsedData.message);
         sendToast("error", parsedData.message);
         return;
       }
@@ -40,7 +39,6 @@ const Employees = () => {
       );
       const parsedData = await res.json();
       if (parsedData.message !== "Success") {
-        console.log(parsedData.message);
         sendToast(
           "error",
           "Employee could not be deleted, maybe employee is currently assigned to a room.",

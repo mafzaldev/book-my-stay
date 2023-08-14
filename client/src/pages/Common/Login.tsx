@@ -32,8 +32,6 @@ export default function Login() {
         },
       );
       const parsedData = await response.json();
-      console.log(parsedData);
-
       if (parsedData.message !== "Success") {
         sendToast("error", parsedData.message);
         return;
