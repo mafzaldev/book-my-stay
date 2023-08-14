@@ -39,23 +39,7 @@ function App() {
     login(userState.name, userState.email, userState.role);
   }, [userType]);
 
-  if (!isLoggedIn) {
-    return (
-      <>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />{" "}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </>
-    );
-  }
-
-  if (userType === UserType.Admin) {
+  if (isLoggedIn && userType === UserType.Admin) {
     return (
       <>
         <Navbar />
@@ -72,7 +56,7 @@ function App() {
         <Toaster />
       </>
     );
-  } else if (userType === UserType.Customer) {
+  } else if (isLoggedIn && userType === UserType.Customer) {
     return (
       <>
         <Navbar />
@@ -92,6 +76,20 @@ function App() {
       </>
     );
   }
+
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />{" "}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Toaster />
+    </>
+  );
 }
 
 export default App;
