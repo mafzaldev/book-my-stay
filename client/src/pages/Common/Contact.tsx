@@ -1,35 +1,49 @@
 import { SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { sendToast } from "../../lib/utils";
 
 const Contact = () => {
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [formState, setFormState] = useState({
-    name: "",
     email: "",
-    password: "",
+    subject: "",
+    message: "",
   });
 
   const handleSubmit = async (
     e: SyntheticEvent<HTMLFormElement, SubmitEvent>,
   ) => {
     e.preventDefault();
-    console.log(formState);
 
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth/signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formState),
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-    const data = await response.json();
+      body: JSON.stringify(formState),
+    };
 
-    if (data.message === "Success") {
-      navigate("/login");
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/customer/contact`,
+        requestOptions,
+      );
+      const data = await response.json();
+      if (data.message !== "Success") {
+        sendToast("error", data.message);
+        return;
+      }
+      sendToast("success", "Email sent successfully.");
+    } catch (error: any) {
+      sendToast("error", "Error occured while sending email.");
     }
+
+    setFormState({
+      email: "",
+      subject: "",
+      message: "",
+    });
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -38,6 +52,7 @@ const Contact = () => {
       [e.currentTarget.id]: e.currentTarget.value,
     });
   };
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-8 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -79,7 +94,7 @@ const Contact = () => {
             <input
               type="text"
               id="subject"
-              value={formState.name}
+              value={formState.subject}
               onChange={handleChange}
               className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
               placeholder="Subject"
@@ -88,23 +103,31 @@ const Contact = () => {
           </div>
           <div>
             <label
-              htmlFor="Message"
+              htmlFor="message"
               className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Message
             </label>
             <textarea
-              name="Message"
+              id="message"
               placeholder="Your Message"
+              value={formState.message}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  message: e.target.value,
+                })
+              }
               className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block h-32 w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-sm-light"
             ></textarea>
           </div>
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              disabled={isSubmitting}
+              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:text-gray-400"
             >
-              Submit
+              Send Email
             </button>
           </div>
         </form>

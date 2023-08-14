@@ -36,6 +36,7 @@ export default function AddRoom() {
         );
         const data = await res.json();
         setAvailableServants(data.data);
+        setFormState({ ...formState, servantId: data.data[0]["id"] });
       } catch (error: any) {
         sendToast("error", error.message);
       }

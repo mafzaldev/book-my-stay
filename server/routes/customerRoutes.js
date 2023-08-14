@@ -5,6 +5,9 @@ const Reservation = require("../models/reservation");
 const TempReservation = require("../models/tempReservation");
 const Employee = require("../models/employee");
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+const { Resend } = require("resend");
+const resend = new Resend(process.env.SENDGRID_API_KEY);
+
 const { checkout } = require("../lib");
 
 router.get("/rooms", async (req, res) => {
@@ -194,6 +197,28 @@ router.get("/payment/:sessionId", async (req, res) => {
     room.save();
   });
   return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+});
+
+router.post("/contact", async (req, res) => {
+  const { email, subject, message } = req.body;
+  try {
+    const data = await resend.emails.send({
+      from: "customer@resend.dev",
+      to: "mafzaldev@gmail.com",
+      subject: subject,
+      html: `<span><strong>Email from:</strong> ${email}</span><br/> <span><strong>Message:</strong> ${message}</span>`,
+    });
+
+    if (!data.id)
+      return res
+        .status(500)
+        .json({ message: "Error occurred while sending email." });
+
+    res.status(200).json({ message: "Success" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error occurred while sending email." });
+  }
 });
 
 module.exports = router;
