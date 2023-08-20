@@ -19,14 +19,13 @@ async function checkout({
         price_data: {
           currency: "pkr",
           product_data: {
-            name: roomDetails.roomNo,
-            description:
-              roomDetails.description + "Note: Quanity is number of days.",
-            images: [roomDetails.image],
+            name: roomNo,
+            description: description + "Note: Quanity is number of days.",
+            images: [image],
           },
-          unit_amount: roomDetails.price * 100,
+          unit_amount: price * 100,
         },
-        quantity: roomDetails.quantity,
+        quantity: quantity,
       },
     ],
     mode: "payment",
